@@ -18,6 +18,13 @@
             android:gravity="center"
             android:padding="12dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên công việc"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
         <EditText
             android:id="@+id/edtTenCongViecSua"
             android:layout_width="match_parent"
@@ -26,6 +33,13 @@
             android:inputType="text"
             android:singleLine="true" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mô tả công việc"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
         <EditText
             android:id="@+id/edtMoTaSua"
             android:layout_width="match_parent"
@@ -33,13 +47,30 @@
             android:hint="Nhập mô tả công việc"
             android:inputType="textMultiLine"
             android:minLines="3"
-            android:gravity="top" />
+            android:gravity="top"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mức độ ưu tiên"
+            android:textSize="16sp"
+            android:paddingTop="12dp" />
+
+        <Spinner
+            android:id="@+id/spMucDoUuTien"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/muc_do_uu_tien"
+            android:spinnerMode="dropdown"
+            android:padding="8dp" />
 
         <Button
             android:id="@+id/btnLuu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lưu" />
+            android:text="Lưu"
+            android:layout_marginTop="20dp" />
 
     </LinearLayout>
 </ScrollView>
