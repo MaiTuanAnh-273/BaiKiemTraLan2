@@ -1,44 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvChiTiet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:text="Thông tin công việc"
+        android:textSize="18sp"
+        android:padding="12dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CHI TIẾT CÔNG VIỆC"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:padding="12dp" />
+    <Button
+        android:id="@+id/btnHoanThanh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đánh dấu hoàn thành" />
 
-        <TextView
-            android:id="@+id/tvTenCongViec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tên công việc"
-            android:textSize="18sp"
-            android:padding="12dp" />
+    <Button
+        android:id="@+id/btnChinhSua"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chỉnh sửa công việc" />
 
-        <TextView
-            android:id="@+id/tvMoTaCongViec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mô tả công việc"
-            android:textSize="18sp"
-            android:padding="12dp" />
-
-        <Button
-            android:id="@+id/btnChinhSua"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chỉnh sửa" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

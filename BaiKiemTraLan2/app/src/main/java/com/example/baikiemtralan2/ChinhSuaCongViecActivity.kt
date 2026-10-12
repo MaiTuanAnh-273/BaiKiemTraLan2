@@ -1,7 +1,8 @@
+
 package com.example.baikiemtralan2
 
-import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -10,33 +11,66 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ChinhSuaCongViecActivity : AppCompatActivity() {
 
+    private lateinit var edtTenCongViec: EditText
+    private lateinit var edtMoTa: EditText
+    private lateinit var btnLuu: Button
+
+    private var congViec: CongViec? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chinh_sua_cong_viec)
 
-        val edtTen = findViewById<EditText>(R.id.edtTenCongViecSua)
-        val edtMoTa = findViewById<EditText>(R.id.edtMoTaSua)
-        val btnLuu = findViewById<Button>(R.id.btnLuu)
+        edtTenCongViec = findViewById(R.id.edtTenCongViec)
+        edtMoTa = findViewById(R.id.edtMoTa)
+        btnLuu = findViewById(R.id.btnLuu)
 
-        // Nhận dữ liệu hiện tại từ màn hình chi tiết
-        edtTen.setText(intent.getStringExtra("TEN_CONG_VIEC") ?: "")
-        edtMoTa.setText(intent.getStringExtra("MO_TA_CONG_VIEC") ?: "")
+        congViec = if (Build.VERSION.SDK_INT >= 33) {
+            intent.getSerializableExtra(
+                "CONG_VIEC",
+                CongViec::class.java
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            (intent.getSerializableExtra("CONG_VIEC") as? CongViec)
+        }
+
+        if (congViec == null) {
+            Toast.makeText(
+                this,
+                "Không nhận được thông tin công việc",
+                Toast.LENGTH_SHORT
+            ).show()
+            finish()
+            return
+        }
+
+        edtTenCongViec.setText(congViec?.tenCongViec)
+        edtMoTa.setText(congViec?.moTa)
 
         btnLuu.setOnClickListener {
-            val ten = edtTen.text.toString().trim()
-            val moTa = edtMoTa.text.toString().trim()
+            val tenMoi = edtTenCongViec.text.toString().trim()
+            val moTaMoi = edtMoTa.text.toString().trim()
 
-            if (ten.isEmpty()) {
-                edtTen.error = "Vui lòng nhập tên công việc"
+            if (tenMoi.isEmpty()) {
+                edtTenCongViec.error =
+                    "Vui lòng nhập tên công việc"
+                edtTenCongViec.requestFocus()
                 return@setOnClickListener
             }
 
-            // Đóng gói dữ liệu để trả về màn hình chi tiết
-            val ketQua = Intent()
-            ketQua.putExtra("TEN_CONG_VIEC", ten)
-            ketQua.putExtra("MO_TA_CONG_VIEC", moTa)
+            val cvCu = congViec ?: return@setOnClickListener
 
-            setResult(Activity.RESULT_OK, ketQua)
+            val congViecMoi = CongViec(
+                tenCongViec = tenMoi,
+                moTa = moTaMoi,
+                trangThai = cvCu.trangThai
+            )
+
+            val ketQua = Intent()
+            ketQua.putExtra("CONG_VIEC", congViecMoi)
+
+            setResult(RESULT_OK, ketQua)
             finish()
         }
     }
