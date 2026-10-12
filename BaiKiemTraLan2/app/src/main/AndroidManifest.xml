@@ -10,6 +10,9 @@
         <activity
             android:name=".ChiTietCongViecActivity"
             android:exported="false" />
+        <activity
+            android:name=".ChinhSuaCongViecActivity"
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
