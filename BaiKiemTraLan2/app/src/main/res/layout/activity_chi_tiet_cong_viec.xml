@@ -34,5 +34,11 @@
             android:textSize="18sp"
             android:padding="12dp" />
 
+        <Button
+            android:id="@+id/btnChinhSua"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chỉnh sửa" />
+
     </LinearLayout>
 </ScrollView>
