@@ -12,8 +12,8 @@ class ChiTietCongViecActivity : AppCompatActivity() {
 
     private lateinit var tvTen: TextView
     private lateinit var tvMoTa: TextView
+    private lateinit var congViec: CongViec
 
-    // Đăng ký Activity Result API
     private val suaCongViecLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -23,14 +23,13 @@ class ChiTietCongViecActivity : AppCompatActivity() {
                 val data = ketQua.data
 
                 if (data != null) {
-                    val tenMoi =
+                    congViec.tenCongViec =
                         data.getStringExtra("TEN_CONG_VIEC") ?: ""
-                    val moTaMoi =
+
+                    congViec.moTa =
                         data.getStringExtra("MO_TA_CONG_VIEC") ?: ""
 
-                    // Cập nhật thông tin trên màn hình chi tiết
-                    tvTen.text = "Tên công việc: $tenMoi"
-                    tvMoTa.text = "Mô tả công việc: $moTaMoi"
+                    hienThiCongViec()
                 }
             }
         }
@@ -45,12 +44,11 @@ class ChiTietCongViecActivity : AppCompatActivity() {
         val btnChinhSua =
             findViewById<Button>(R.id.btnChinhSua)
 
-        // Nhận dữ liệu từ MainActivity
-        val ten = intent.getStringExtra("TEN_CONG_VIEC") ?: ""
-        val moTa = intent.getStringExtra("MO_TA_CONG_VIEC") ?: ""
+        // Nhận đối tượng CongViec từ MainActivity
+        congViec = intent.getSerializableExtra("CONG_VIEC") as? CongViec
+            ?: CongViec("", "")
 
-        tvTen.text = "Tên công việc: $ten"
-        tvMoTa.text = "Mô tả công việc: $moTa"
+        hienThiCongViec()
 
         btnChinhSua.setOnClickListener {
             val intentSua = Intent(
@@ -58,19 +56,24 @@ class ChiTietCongViecActivity : AppCompatActivity() {
                 ChinhSuaCongViecActivity::class.java
             )
 
-            // Gửi dữ liệu hiện tại sang màn hình chỉnh sửa
-            intentSua.putExtra("TEN_CONG_VIEC", tenHienTai())
-            intentSua.putExtra("MO_TA_CONG_VIEC", moTaHienTai())
+            intentSua.putExtra(
+                "TEN_CONG_VIEC",
+                congViec.tenCongViec
+            )
+
+            intentSua.putExtra(
+                "MO_TA_CONG_VIEC",
+                congViec.moTa
+            )
 
             suaCongViecLauncher.launch(intentSua)
         }
     }
 
-    private fun tenHienTai(): String {
-        return tvTen.text.toString().removePrefix("Tên công việc: ")
-    }
+    private fun hienThiCongViec() {
+        val thongTin = congViec.thongTinCongViec().lines()
 
-    private fun moTaHienTai(): String {
-        return tvMoTa.text.toString().removePrefix("Mô tả công việc: ")
+        tvTen.text = thongTin[0]
+        tvMoTa.text = thongTin.drop(1).joinToString("\n")
     }
 }
