@@ -5,7 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
+import android.widget.TextView
 class MainActivity : AppCompatActivity() {
     private lateinit var tvMaSV: TextView
     private lateinit var tvHoTen: TextView
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val student = Student(
             maSinhVien = "2415141122125",
             hoTen = "Mai Tuấn Anh",
-            lop = "KTPM1",
+            lop = "126TLTTD01",
             tuoi = 20,
             diem = 8.5
         )
