@@ -1,4 +1,3 @@
-
 package com.example.baikiemtralan2
 
 import android.content.Intent
@@ -7,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
 class ChiTietCongViecActivity : AppCompatActivity() {
@@ -16,6 +16,32 @@ class ChiTietCongViecActivity : AppCompatActivity() {
     private lateinit var btnChinhSua: Button
 
     private var congViec: CongViec? = null
+
+    private val chinhSuaLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { ketQua ->
+
+            if (ketQua.resultCode == RESULT_OK) {
+                val data = ketQua.data
+
+                val cvMoi = if (Build.VERSION.SDK_INT >= 33) {
+                    data?.getSerializableExtra(
+                        "CONG_VIEC",
+                        CongViec::class.java
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    (data?.getSerializableExtra("CONG_VIEC")
+                            as? CongViec)
+                }
+
+                if (cvMoi != null) {
+                    congViec = cvMoi
+                    hienThiCongViec()
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +58,8 @@ class ChiTietCongViecActivity : AppCompatActivity() {
             )
         } else {
             @Suppress("DEPRECATION")
-            (intent.getSerializableExtra("CONG_VIEC") as? CongViec)
+            (intent.getSerializableExtra("CONG_VIEC")
+                    as? CongViec)
         }
 
         if (congViec == null) {
@@ -41,6 +68,7 @@ class ChiTietCongViecActivity : AppCompatActivity() {
                 "Không nhận được thông tin công việc",
                 Toast.LENGTH_SHORT
             ).show()
+
             finish()
             return
         }
@@ -50,11 +78,12 @@ class ChiTietCongViecActivity : AppCompatActivity() {
         btnHoanThanh.setOnClickListener {
             val cv = congViec ?: return@setOnClickListener
 
-            cv.trangThai = if (cv.trangThai == "Đã hoàn thành") {
-                "Chưa hoàn thành"
-            } else {
-                "Đã hoàn thành"
-            }
+            cv.trangThai =
+                if (cv.trangThai == "Đã hoàn thành") {
+                    "Chưa hoàn thành"
+                } else {
+                    "Đã hoàn thành"
+                }
 
             hienThiCongViec()
         }
@@ -68,7 +97,8 @@ class ChiTietCongViecActivity : AppCompatActivity() {
             )
 
             intent.putExtra("CONG_VIEC", cv)
-            startActivityForResult(intent, 100)
+
+            chinhSuaLauncher.launch(intent)
         }
     }
 
@@ -81,31 +111,5 @@ class ChiTietCongViecActivity : AppCompatActivity() {
             } else {
                 "Đánh dấu hoàn thành"
             }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            val cvMoi = if (Build.VERSION.SDK_INT >= 33) {
-                data?.getSerializableExtra(
-                    "CONG_VIEC",
-                    CongViec::class.java
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                (data?.getSerializableExtra("CONG_VIEC") as? CongViec)
-            }
-
-            if (cvMoi != null) {
-                congViec = cvMoi
-                hienThiCongViec()
-            }
-        }
     }
 }
